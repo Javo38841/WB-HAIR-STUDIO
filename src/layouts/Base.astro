@@ -2,9 +2,46 @@
 import '@fontsource-variable/archivo/wdth.css';
 import '@fontsource/instrument-serif/400-italic.css';
 import '../styles/global.css';
-import { sitio } from '../data/sitio';
+import { servicios, sitio } from '../data/sitio';
 
 const { titulo = `${sitio.nombre} — Barbería en ${sitio.ciudad}` } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site).href;
+const imagen = new URL('og.jpg', Astro.site).href;
+const imagenAlt = `Logo de ${sitio.nombre} sobre la foto de un corte degradado`;
+
+// Ficha del negocio para los resultados locales de Google
+const negocio = {
+  '@context': 'https://schema.org',
+  '@type': 'HairSalon',
+  name: sitio.nombre,
+  description: sitio.descripcion,
+  url: canonica,
+  image: imagen,
+  telephone: sitio.telefono,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${sitio.direccion}, ${sitio.piso}`,
+    addressLocality: sitio.ciudad,
+    addressRegion: sitio.region,
+    addressCountry: 'CL',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: sitio.apertura,
+    closes: sitio.cierre,
+  },
+  hasMap: sitio.urlMapa,
+  sameAs: [sitio.urlInstagram],
+  makesOffer: servicios
+    .filter((s) => s.precio)
+    .map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.nombre },
+      price: s.precio!.replace(/\D/g, ''),
+      priceCurrency: 'CLP',
+    })),
+};
 const favicon = `${import.meta.env.BASE_URL}/favicon.svg`.replace('//', '/');
 ---
 
@@ -16,6 +53,24 @@ const favicon = `${import.meta.env.BASE_URL}/favicon.svg`.replace('//', '/');
     <title>{titulo}</title>
     <meta name="description" content={sitio.descripcion} />
     <meta name="theme-color" content="#0b0b0b" />
+    <link rel="canonical" href={canonica} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={sitio.nombre} />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={sitio.descripcion} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagen} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imagenAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={sitio.descripcion} />
+    <meta name="twitter:image" content={imagen} />
+    <meta name="twitter:image:alt" content={imagenAlt} />
+    <script type="application/ld+json" set:html={JSON.stringify(negocio)} />
     <link rel="icon" type="image/svg+xml" href={favicon} />
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
