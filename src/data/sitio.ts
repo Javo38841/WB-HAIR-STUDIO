@@ -8,18 +8,22 @@ const mensaje = 'Hola, quiero reservar una hora en WB Hair Studio';
 export const sitio = {
   nombre: 'WB Hair Studio',
   descripcion:
-    'Cortes clásicos y modernos, degradados, barba, cejas, diseños y lavado de pelo en Av. Ramón Pérez Opazo 3070, 2do piso.',
+    'Cortes clásicos y modernos, degradados, barba, cejas, diseños y lavado de pelo en Av. Ramón Pérez Opazo 3070, 2do piso, Alto Hospicio.',
   direccion,
   piso: '2do piso',
-  ciudad: null as string | null,
+  ciudad: 'Alto Hospicio',
   telefonoVisible: '+56 9 4250 2267',
   instagram: 'mundobrillante.hairstudio',
   urlInstagram: 'https://www.instagram.com/mundobrillante.hairstudio/',
   urlWhatsapp: `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`,
-  urlMapa: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${direccion}, Chile`)}`,
-  horario: null as string | null,
+  urlMapa: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${direccion}, Alto Hospicio, Chile`)}`,
+  horario: 'Todos los días, de 10:00 a 20:00 hrs',
+  credito: {
+    autor: 'Javier Choque',
+    url: 'https://biblioteca.gitflow.cl/',
+  },
   dueno: {
-    nombre: null as string | null,
+    nombre: 'Braulio',
     cargo: 'Dueño',
   },
 };

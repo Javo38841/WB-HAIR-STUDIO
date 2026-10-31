@@ -4,7 +4,7 @@ import '@fontsource/instrument-serif/400-italic.css';
 import '../styles/global.css';
 import { sitio } from '../data/sitio';
 
-const { titulo = `${sitio.nombre} — Barbería` } = Astro.props;
+const { titulo = `${sitio.nombre} — Barbería en ${sitio.ciudad}` } = Astro.props;
 const favicon = `${import.meta.env.BASE_URL}/favicon.svg`.replace('//', '/');
 ---
 

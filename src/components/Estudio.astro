@@ -13,7 +13,7 @@ import { sitio } from '../data/sitio';
 
   <div class="cuerpo">
     <figure class="retrato" data-entrada>
-      <Image src={dueno} alt="Retrato del dueño de WB Hair Studio" widths={[430, 860]} sizes="(max-width: 760px) 100vw, 34vw" />
+      <Image src={dueno} alt={`Retrato de ${sitio.dueno.nombre}, dueño de WB Hair Studio`} widths={[430, 860]} sizes="(max-width: 760px) 100vw, 34vw" />
       <figcaption>
         {sitio.dueno.nombre ?? <span class="pendiente">Nombre por confirmar</span>}
         <span class="etiqueta">{sitio.dueno.cargo}</span>

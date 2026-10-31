@@ -13,7 +13,13 @@ import { navegacion, sitio } from '../data/sitio';
       <li><a href={sitio.urlInstagram} target="_blank" rel="noopener">Instagram</a></li>
     </ul>
   </nav>
-  <p class="etiqueta">© {new Date().getFullYear()} {sitio.nombre}</p>
+  <div class="base">
+    <p class="etiqueta">© {new Date().getFullYear()} {sitio.nombre}</p>
+    <p class="credito">
+      ¿Quieres una web así?{' '}
+      <a href={sitio.credito.url} target="_blank" rel="noopener">Hecha por {sitio.credito.autor} ↗</a>
+    </p>
+  </div>
 </footer>
 
 <style>
@@ -27,7 +33,27 @@ import { navegacion, sitio } from '../data/sitio';
 
   .logo { width: clamp(9rem, 20vw, 14rem); height: auto; }
   ul { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.5rem 1.75rem; font-size: 0.9375rem; }
-  p { grid-column: 1 / -1; color: var(--gris); padding-top: 1.25rem; border-top: 1px solid var(--linea); }
+
+  .base {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--linea);
+    color: var(--gris);
+  }
+
+  .credito { font-size: 0.875rem; }
+  .credito a {
+    display: inline-block;
+    padding-block: 0.35rem;
+    color: var(--blanco);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
 
   @media (max-width: 760px) {
     .pie { grid-template-columns: minmax(0, 1fr); }
