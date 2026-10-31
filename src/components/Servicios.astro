@@ -1,0 +1,69 @@
+---
+import { servicios, sitio } from '../data/sitio';
+---
+
+<section class="seccion seccion--clara" id="servicios">
+  <div class="cabeza" data-entrada>
+    <h2 class="titular">Lo que <em>hacemos</em>.</h2>
+    <a class="boton" href={sitio.urlWhatsapp} target="_blank" rel="noopener">Reservar</a>
+  </div>
+
+  <ol class="lista">
+    {servicios.map((servicio, i) => (
+      <li data-entrada>
+        <span class="numero">{String(i + 1).padStart(2, '0')}</span>
+        <h3>{servicio.nombre}</h3>
+        <p class="detalle">{servicio.detalle}</p>
+        <p class="precio">{servicio.precio ?? <span class="pendiente">Precio por confirmar</span>}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .lista { border-top: 1px solid var(--negro); }
+
+  li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 5fr) minmax(0, 3fr) 10rem;
+    gap: 1rem;
+    align-items: baseline;
+    padding-block: clamp(1.1rem, 2.4vw, 1.9rem);
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  .numero { font-size: 0.8125rem; font-weight: 500; color: var(--gris); }
+
+  h3 {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 3.25rem);
+    font-weight: 800;
+    font-stretch: 125%;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  .detalle { color: #55524d; }
+  .precio { text-align: right; font-size: 0.9375rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pendiente { color: #6f6c66; font-weight: 400; }
+
+  @media (hover: hover) {
+    h3 { transition: transform 0.4s var(--curva); }
+    li:hover h3 { transform: translateX(0.6rem); }
+  }
+
+  @media (max-width: 760px) {
+    li { grid-template-columns: 2.25rem minmax(0, 1fr); gap: 0.15rem 0.5rem; }
+    .detalle, .precio { grid-column: 2; text-align: left; font-size: 0.9375rem; }
+  }
+</style>

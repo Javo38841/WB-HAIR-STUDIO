@@ -1,0 +1,109 @@
+---
+import Marca from '../assets/marca/mark.svg';
+import { navegacion, sitio } from '../data/sitio';
+---
+
+<header class="cabecera" data-cabecera>
+  <a href="#inicio" class="logo" aria-label={`${sitio.nombre}, inicio`}>
+    <Marca aria-hidden="true" />
+  </a>
+
+  <nav class="nav" id="menu" aria-label="Principal">
+    <ul>
+      {navegacion.map((item) => (
+        <li><a href={item.href}>{item.texto}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <a class="boton boton--lleno reservar" href={sitio.urlWhatsapp} target="_blank" rel="noopener">Reservar</a>
+
+  <button class="abrir" type="button" aria-expanded="false" aria-controls="menu" data-abrir>
+    <span class="etiqueta">Menú</span>
+  </button>
+</header>
+
+<script>
+  const cabecera = document.querySelector<HTMLElement>('[data-cabecera]')!;
+  const abrir = document.querySelector<HTMLButtonElement>('[data-abrir]')!;
+
+  const alternar = (abierto: boolean) => {
+    cabecera.classList.toggle('abierta', abierto);
+    abrir.setAttribute('aria-expanded', String(abierto));
+    abrir.querySelector('span')!.textContent = abierto ? 'Cerrar' : 'Menú';
+    document.body.style.overflow = abierto ? 'hidden' : '';
+  };
+
+  abrir.addEventListener('click', () => alternar(!cabecera.classList.contains('abierta')));
+  cabecera.querySelectorAll('nav a').forEach((a) => a.addEventListener('click', () => alternar(false)));
+  addEventListener('keydown', (e) => e.key === 'Escape' && alternar(false));
+
+  const alHacerScroll = () => cabecera.classList.toggle('compacta', scrollY > 40);
+  addEventListener('scroll', alHacerScroll, { passive: true });
+  alHacerScroll();
+</script>
+
+<style>
+  .cabecera {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.1rem var(--margen);
+    background: linear-gradient(rgb(11 11 11 / 0.72), transparent);
+    transition: padding 0.3s;
+  }
+
+  .cabecera.compacta {
+    padding-block: 0.7rem;
+    background: rgb(11 11 11 / 0.86);
+    backdrop-filter: blur(10px);
+  }
+
+  .logo { position: relative; z-index: 2; margin-right: auto; }
+  .logo :global(svg) { display: block; width: 3.6rem; height: auto; }
+
+  .nav ul { display: flex; gap: 2rem; }
+  .nav a {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .reservar { min-height: 2.5rem; padding: 0.5rem 1.25rem; position: relative; z-index: 2; }
+  .abrir { display: none; position: relative; z-index: 2; min-height: 2.75rem; }
+
+  @media (hover: hover) {
+    .nav a { transition: opacity 0.2s; }
+    .nav ul:hover a:not(:hover) { opacity: 0.45; }
+  }
+
+  @media (max-width: 760px) {
+    .cabecera { gap: 1.25rem; }
+    .abrir { display: block; }
+
+    .nav {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      padding: var(--margen);
+      background: var(--negro);
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+
+    .abierta .nav { visibility: visible; opacity: 1; }
+    .nav ul { flex-direction: column; gap: 0.75rem; }
+    .nav a {
+      font-size: clamp(2rem, 11vw, 3.25rem);
+      font-weight: 800;
+      font-stretch: 125%;
+      letter-spacing: -0.02em;
+    }
+  }
+</style>

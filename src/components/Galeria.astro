@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { sitio } from '../data/sitio';
+
+// Para agregar un trabajo basta con dejar la foto en src/assets/trabajos/.
+// El orden sale del nombre del archivo.
+const archivos = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/trabajos/*.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+
+const fotos = Object.entries(archivos)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([ruta, modulo]) => ({
+    src: modulo.default,
+    alt: 'Corte: ' + ruta.split('/').pop()!.replace(/^\d+-|\.\w+$/g, '').replaceAll('-', ' '),
+  }));
+---
+
+<section class="seccion" id="trabajos">
+  <div class="cabeza" data-entrada>
+    <div>
+      <p class="etiqueta">Trabajos</p>
+      <h2 class="titular">Lo mejor <em>de</em> la silla.</h2>
+    </div>
+    <a class="boton" href={sitio.urlInstagram} target="_blank" rel="noopener">Ver en Instagram</a>
+  </div>
+
+  <ul class="grilla">
+    {fotos.map((foto) => (
+      <li data-entrada>
+        <button type="button" data-foto={foto.src.src} data-alt={foto.alt} aria-label={`Ampliar: ${foto.alt}`}>
+          <Image src={foto.src} alt={foto.alt} widths={[400, 640, 960]} sizes="(max-width: 760px) 50vw, 32vw" />
+        </button>
+      </li>
+    ))}
+  </ul>
+
+  <dialog class="visor" data-visor aria-label="Foto ampliada">
+    <img alt="" data-visor-img />
+    <form method="dialog"><button class="boton boton--lleno">Cerrar</button></form>
+  </dialog>
+</section>
+
+<script>
+  const visor = document.querySelector<HTMLDialogElement>('[data-visor]')!;
+  const img = document.querySelector<HTMLImageElement>('[data-visor-img]')!;
+
+  document.querySelectorAll<HTMLButtonElement>('[data-foto]').forEach((boton) =>
+    boton.addEventListener('click', () => {
+      img.src = boton.dataset.foto!;
+      img.alt = boton.dataset.alt!;
+      visor.showModal();
+    }),
+  );
+
+  visor.addEventListener('click', (e) => e.target === visor && visor.close());
+</script>
+
+<style>
+  .cabeza {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .cabeza .etiqueta { margin-bottom: 1.5rem; }
+
+  .grilla {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.4rem, 1vw, 0.75rem);
+  }
+
+  .grilla button { display: block; width: 100%; overflow: hidden; }
+
+  .grilla img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.7s var(--curva);
+  }
+
+  @media (hover: hover) {
+    .grilla button:hover img { transform: scale(1.04); }
+  }
+
+  .visor {
+    max-width: min(92vw, 44rem);
+    max-height: 92svh;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--blanco);
+  }
+
+  .visor::backdrop { background: rgb(0 0 0 / 0.9); }
+  .visor[open] { display: grid; gap: 1rem; justify-items: center; }
+  .visor img { max-height: 78svh; width: auto; }
+
+  @media (max-width: 760px) {
+    .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

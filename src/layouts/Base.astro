@@ -1,0 +1,38 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '../styles/global.css';
+import { sitio } from '../data/sitio';
+
+const { titulo = `${sitio.nombre} — Barbería` } = Astro.props;
+const favicon = `${import.meta.env.BASE_URL}/favicon.svg`.replace('//', '/');
+---
+
+<!doctype html>
+<html lang="es-CL">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={sitio.descripcion} />
+    <meta name="theme-color" content="#0b0b0b" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      const observador = new IntersectionObserver(
+        (entradas) => {
+          for (const entrada of entradas) {
+            if (!entrada.isIntersecting) continue;
+            entrada.target.classList.add('visible');
+            observador.unobserve(entrada.target);
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('[data-entrada]').forEach((el) => observador.observe(el));
+    </script>
+  </body>
+</html>

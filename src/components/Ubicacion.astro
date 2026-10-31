@@ -1,0 +1,64 @@
+---
+import { Image } from 'astro:assets';
+import foto from '../assets/estudio/salon-vertical.jpg';
+import { sitio } from '../data/sitio';
+---
+
+<section class="seccion seccion--clara ubicacion" id="ubicacion">
+  <div data-entrada>
+    <h2 class="titular">Te <em>esperamos</em>.</h2>
+    <dl>
+      <div>
+        <dt class="etiqueta">Dirección</dt>
+        <dd>
+          {sitio.direccion}, {sitio.piso}
+          <br />
+          {sitio.ciudad ?? <span class="pendiente">Ciudad por confirmar</span>}
+        </dd>
+      </div>
+      <div>
+        <dt class="etiqueta">Horario</dt>
+        <dd>{sitio.horario ?? <span class="pendiente">Horario por confirmar</span>}</dd>
+      </div>
+      <div>
+        <dt class="etiqueta">Contacto</dt>
+        <dd>
+          <a href={sitio.urlWhatsapp} target="_blank" rel="noopener">{sitio.telefonoVisible}</a>
+          <br />
+          <a href={sitio.urlInstagram} target="_blank" rel="noopener">@{sitio.instagram}</a>
+        </dd>
+      </div>
+    </dl>
+    <a class="boton" href={sitio.urlMapa} target="_blank" rel="noopener">Cómo llegar</a>
+  </div>
+  <Image class="foto" src={foto} alt="Interior del salón con sillones de barbero y ventanales" widths={[640, 1200]} sizes="(max-width: 760px) 100vw, 40vw" data-entrada />
+</section>
+
+<style>
+  .ubicacion {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 4fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  dl { display: grid; margin-block: clamp(2rem, 5vw, 3.5rem); border-top: 1px solid var(--negro); }
+
+  dl > div {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid var(--linea-oscura);
+  }
+
+  dt { padding-top: 0.25em; }
+  dd a { text-decoration: underline; text-underline-offset: 0.2em; overflow-wrap: anywhere; }
+  .pendiente { color: #6f6c66; }
+  .foto { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+
+  @media (max-width: 760px) {
+    .ubicacion { grid-template-columns: minmax(0, 1fr); }
+    dl > div { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+  }
+</style>

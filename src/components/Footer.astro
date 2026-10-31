@@ -1,0 +1,36 @@
+---
+import Logo from '../assets/marca/logo.svg';
+import { navegacion, sitio } from '../data/sitio';
+---
+
+<footer class="pie">
+  <Logo class="logo" role="img" aria-label={sitio.nombre} />
+  <nav aria-label="Pie de página">
+    <ul>
+      {navegacion.map((item) => (
+        <li><a href={item.href}>{item.texto}</a></li>
+      ))}
+      <li><a href={sitio.urlInstagram} target="_blank" rel="noopener">Instagram</a></li>
+    </ul>
+  </nav>
+  <p class="etiqueta">© {new Date().getFullYear()} {sitio.nombre}</p>
+</footer>
+
+<style>
+  .pie {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: end;
+    padding: clamp(3rem, 7vw, 5rem) var(--margen) 2rem;
+  }
+
+  .logo { width: clamp(9rem, 20vw, 14rem); height: auto; }
+  ul { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.5rem 1.75rem; font-size: 0.9375rem; }
+  p { grid-column: 1 / -1; color: var(--gris); padding-top: 1.25rem; border-top: 1px solid var(--linea); }
+
+  @media (max-width: 760px) {
+    .pie { grid-template-columns: minmax(0, 1fr); }
+    ul { justify-content: start; }
+  }
+</style>
